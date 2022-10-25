@@ -1,31 +1,18 @@
-import asyncio
 import modules
 
-def connect_db():
-    from surrealdb.clients.http import HTTPClient
+def get_config():
     import json
 
     config_file = open("surrealdb.json")
     config = json.load(config_file)
+    return config
 
-    client = HTTPClient(
-        config["url"],
-        namespace=config["namespace"],
-        database=config["database"],
-        username=config["username"],
-        password=config["password"],
-    )
 
-    return client
-
-async def run():
-    client = connect_db()
-    output = await client.execute("INFO FOR DB")
-    print(output)
-    await modules.backup_table("skills", client)
+def run():
+    config = get_config()
+    modules.export_db(config)
     
 
 
 if __name__ == "__main__":
-    asyncio.run(run())
-    
+    run()

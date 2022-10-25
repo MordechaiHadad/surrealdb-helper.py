@@ -1,11 +1,5 @@
-import json
+import subprocess
 
-async def backup_table(name, client):
-    data = await client.execute(f"SELECT * FROM {name}")
-    json_object = json.dumps(data, indent=4)
-
-    with open(f"{name}.json", "w") as file:
-        file.write(json_object)
-
-async def import_table(name, client):
-    pass
+def export_db(config):
+    arguments = ["surreal", "export", "--conn", f"{config['url']}", "--user", f"{config['username']}", "--pass", f"{config['password']}", "--ns", f"{config['namespace']}", "--db", f"{config['database']}", "export.sql"]
+    subprocess.run(arguments)
