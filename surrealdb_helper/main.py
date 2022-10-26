@@ -5,9 +5,25 @@ import sys
 def get_config():
     import json
 
-    config_file = open("surrealdb.json")
-    config = json.load(config_file)
-    return config
+    try:
+        config_file = open("surrealdb.json")
+        config = json.load(config_file)
+        config_file.close()
+        return config
+    except FileNotFoundError:
+        print("There is no file named surrealdb.json, please change the content of the newly created surrealdb.json")
+        content = {
+                "url": "http://localhost:8000",
+                "namespace": "test",
+                "database": "test",
+                "username": "root",
+                "password": "root"
+                }
+        config_file = open("surrealdb.json", "w")
+        config_file.write(json.dumps(content))
+        config_file.close()
+        sys.exit(1)
+
 
 
 def run():
